@@ -53,9 +53,9 @@ public class MinTerm {
 
 	// comparing minterm
 
-	public boolean isSame(MinTerm a) throws ExceptionQuine {
+	public boolean isSame(MinTerm a) throws Exception {
 		if (count != a.count)
-			throw new ExceptionQuine("MinTerm::isSame()");
+			throw new Exception("MinTerm::isSame()");
 		for (int i = 0; i < count; i++) {
 			if (term[i] != a.term[i])
 				return false;
@@ -66,9 +66,9 @@ public class MinTerm {
 
 	// number of the difference
 
-	public int resolutionCount(MinTerm a) throws ExceptionQuine {
+	public int resolutionCount(MinTerm a) throws Exception {
 		if (count != a.count)
-			throw new ExceptionQuine("MinTerm::resolutionCount()");
+			throw new Exception("MinTerm::resolutionCount()");
 		int resCount = 0;
 		for (int i = 0; i < count; i++) {
 			if (term[i] != a.term[i])
@@ -79,9 +79,9 @@ public class MinTerm {
 
 	// position of the first difference
 
-	public int resolutionPos(MinTerm a) throws ExceptionQuine {
+	public int resolutionPos(MinTerm a) throws Exception {
 		if (count != a.count)
-			throw new ExceptionQuine("MinTerm::resoutionPos()");
+			throw new Exception("MinTerm::resoutionPos()");
 		for (int i = 0; i < count; i++) {
 			if (term[i] != a.term[i])
 				return i;
@@ -92,9 +92,9 @@ public class MinTerm {
 
 	// combining two minterms
 
-	public static MinTerm combine(MinTerm a, MinTerm b) throws ExceptionQuine {
+	public static MinTerm combine(MinTerm a, MinTerm b) throws Exception {
 		if (a.count != b.count)
-			throw new ExceptionQuine("MinTerm::combine()");
+			throw new Exception("MinTerm::combine()");
 		StringBuffer buf = new StringBuffer(a.count);
 		for (int i = 0; i < a.count; i++) {
 			if (a.term[i] != b.term[i])

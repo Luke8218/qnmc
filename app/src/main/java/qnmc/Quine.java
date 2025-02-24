@@ -8,9 +8,9 @@ public class Quine {
 	public int count = 0;
 
 	// adding minterms
-	public void addTerm(String str) throws ExceptionQuine {
+	public void addTerm(String str) throws Exception {
 		if (count == MAX_TERMS)
-			throw new ExceptionQuine("Quine::addTerm()");
+			throw new Exception("Quine::addTerm()");
 		terms[count++] = new MinTerm(str);
 	}
 
@@ -24,7 +24,7 @@ public class Quine {
 	}
 
 	// see whether the element already exists
-	public boolean hasTerm(MinTerm a) throws ExceptionQuine {
+	public boolean hasTerm(MinTerm a) throws Exception {
 		for (int i = 0; i < count; i++) {
 			if (a.isSame(terms[i]))
 				return true;
@@ -33,13 +33,12 @@ public class Quine {
 	}
 
 	// verification of the function
-	public void simplify() throws ExceptionQuine {
-		while (reduce() > 0)
-			;
+	public void simplify() throws Exception {
+		while (reduce() > 0);
 	}
 
 	// reduction of the minterm
-	private int reduce() throws ExceptionQuine {
+	private int reduce() throws Exception {
 		// variable
 		int reducedCount = 0;
 		MinTerm[] reducedTerms = new MinTerm[MAX_TERMS];
