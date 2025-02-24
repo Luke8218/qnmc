@@ -91,7 +91,7 @@ public class GUI extends JFrame {
 
 					String result = quine.toString();
 					resultsTextArea.setText(result);
-				} catch (ExceptionQuine e) {
+				} catch (Exception e) {
 					System.out.println("An error occured processing the values");
 				}
 
@@ -107,7 +107,6 @@ public class GUI extends JFrame {
 		
 		setUILookAndFeel();
 
-		System.out.println(toBinary(12, 4));
 		String numOfBitsString = JOptionPane.showInputDialog("Enter the boolean bits(3 to 5): ");
 		int numOfBits = -1;
 
@@ -134,15 +133,15 @@ public class GUI extends JFrame {
 		}
 	}
 
-	private static String toBinary(int number, int bits) {
+	public static String toBinary(int number, int bits) throws Exception {
 		int maxValue = (1 << bits) - 1;
 
 		if (number < 0) {
-			System.out.println("Number must be non-negative");
+			throw new Exception("Number must be non-negative");
 		}
 
 		if (number > maxValue) {
-			System.out.println("Number cannot be represented with " + bits + " bits.");
+			throw new Exception("Number cannot be represented with " + bits + " bits.");
 		}
 
 		String binary = Integer.toBinaryString(number);
