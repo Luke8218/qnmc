@@ -3,8 +3,12 @@ package qnmc;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 public class MenuBar extends JMenuBar {
 
@@ -12,109 +16,87 @@ public class MenuBar extends JMenuBar {
 
 	public static int bits;
 
-	private String d1 = "Jane Smith";
-	private String d2 = "John Doe";
-	private String d3 = "Ashok Kumar";
-	private String objective = "The Quine McCluskey algorithm (or the method of prime implicants) "
-			+ "\nis a method used for minimization of boolean functions which was developed by W.V. "
-			+ "\nQuine and Edward J. McCluskey. It is functionally identical to Karnaugh mapping, "
-			+ "\nbut the tabular form makes it more efficient for use in computer algorithms, and"
-			+ "\nit also gives a deterministic way to check that the minimal form of a Boolean "
-			+ "\nfunction has been reached. It is sometimes referred to as the tabulation method.";
+	private static final String OBJECTIVE = 
+	"""
+		The Quine McCluskey algorithm (or the method of prime implicants) 
+		is a method used for minimization of boolean functions which was developed by W.V. 
+		Quine and Edward J. McCluskey. It is functionally identical to Karnaugh mapping, 
+		but the tabular form makes it more efficient for use in computer algorithms, and
+		it also gives a deterministic way to check that the minimal form of a Boolean 
+		function has been reached. It is sometimes referred to as the tabulation method.
+	""";
 
 	public MenuBar() {
-		JMenu fileMenu = new JMenu("File");
-		fileMenu.setMnemonic(KeyEvent.VK_F);
-		add(fileMenu);
+		
+		// Create 'File' option and add to the menu bar
+		JMenu fileMenuBarOption = new JMenu("File");
+		fileMenuBarOption.setMnemonic(KeyEvent.VK_F);
+		add(fileMenuBarOption);
 
+		// Create 'New' item and add as child to 'File'
 		JMenuItem newMenuItem = new JMenuItem("New  Ctrl+N", KeyEvent.VK_N);
-		fileMenu.add(newMenuItem);
+		fileMenuBarOption.add(newMenuItem);
 		newMenuItem.addActionListener(new ActionListener() {
-			
-
 			public void actionPerformed(ActionEvent arg0) {
-
-				if(GUI.set!=null)GUI.set.clear();
-				
-				String s = JOptionPane
-						.showInputDialog("Enter the boolean bits(3 to 5): ");
-				try {
-					
-					bits = Integer.parseInt(s);
-					
-				} catch (NumberFormatException e) {
-
-					bits=2;
-				}
-				
-				if(bits<3||bits>5){
-					JOptionPane.showMessageDialog(null,
-							"Wrong input. Press File and then NEW", "Error",
-							JOptionPane.ERROR_MESSAGE, null);
-
-				}
-				
+				GUI.start();
 			}
 		});
 
-		JMenuItem exit = new JMenuItem("Exit  Alt+F4", KeyEvent.VK_N);
-		fileMenu.add(exit);
-		exit.addActionListener(new ActionListener() {
+		// Create 'Exit' item and add as child to 'File'
+		JMenuItem exitMenuItem = new JMenuItem("Exit  Alt+F4", KeyEvent.VK_N);
+		fileMenuBarOption.add(exitMenuItem);
+		exitMenuItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.exit(0);
 			}
 		});
 
-		JMenu help = new JMenu("Help");
-		help.setMnemonic(KeyEvent.VK_F);
-		add(help);
+		// Create 'Help' option and add to the menu bar
+		JMenu helpMenuBarOption = new JMenu("Help");
+		helpMenuBarOption.setMnemonic(KeyEvent.VK_F);
+		add(helpMenuBarOption);
 
-		JMenuItem objective = new JMenuItem("About Quine McCluskey Algorithm",
-				KeyEvent.VK_N);
-		help.add(objective);
-		objective.addActionListener(new ActionListener() {
+		// Create 'About Quine McCluskey Algorithm' item and add as child to 'Help'
+		JMenuItem aboutMenuItem = new JMenuItem("About Quine McCluskey Algorithm", KeyEvent.VK_N);
+		helpMenuBarOption.add(aboutMenuItem);
+		aboutMenuItem.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, MenuBar.this.objective,
-						"Quine McCluskey Prime Implicant Generator",
-						JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, OBJECTIVE, "Quine McCluskey Prime Implicant Generator", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 
-		JMenu authors = new JMenu("About...");
-		authors.setMnemonic(KeyEvent.VK_F);
-		add(authors);
+		// Create 'Help' option and add to the menu bar
+		JMenu developers = new JMenu("About...");
+		developers.setMnemonic(KeyEvent.VK_F);
+		add(developers);
 
-		JMenuItem jd1 = new JMenuItem("Developer 1", KeyEvent.VK_N);
-		authors.add(jd1);
-		jd1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		// Add 'Jane Smith', 'John Doe', 'Ashok Kumar' to the 'About' section
+		for (JMenuItem item : getDeveloperMenuBarItems()) {
+			developers.add(item);
+		}
+	}
 
-				JOptionPane.showMessageDialog(null, d1,
-						"Quine McCluskey Prime Implicant Generator",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+	public static ArrayList<JMenuItem> getDeveloperMenuBarItems() {
+		ArrayList<JMenuItem> developerMenuItems = new ArrayList<>();
+		String[] developers = {"Jane Smith", "John Doe", "Ashok Kumar"};
 
-		JMenuItem jd2 = new JMenuItem("Developer 2", KeyEvent.VK_N);
-		authors.add(jd2);
-		jd2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, d2,
-						"Quine McCluskey Prime Implicant Generator",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+		for (int i = 0; i < developers.length; i++) {
+			final int developerIndex = i;
 
-		JMenuItem jd3 = new JMenuItem("Developer 3", KeyEvent.VK_N);
-		authors.add(jd3);
-		jd3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				JOptionPane.showMessageDialog(null, d3,
-						"Quine McCluskey Prime Implicant Generator",
-						JOptionPane.INFORMATION_MESSAGE);
-			}
-		});
+			JMenuItem developerMenuItem = new JMenuItem("Developer " + (i + 1));
+			developerMenuItem.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					JOptionPane.showMessageDialog(null, developers[developerIndex],
+							"Quine McCluskey Prime Implicant Generator", JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
 
+			developerMenuItems.add(developerMenuItem);
+		}
+
+		return developerMenuItems;
 	}
 
 }

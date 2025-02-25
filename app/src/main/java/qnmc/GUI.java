@@ -104,24 +104,8 @@ public class GUI extends JFrame {
 	}
 
 	public static void main(String[] args) {
-		
 		setUILookAndFeel();
-
-		String numOfBitsString = JOptionPane.showInputDialog("Enter the boolean bits(3 to 5): ");
-		int numOfBits = -1;
-
-		try {
-			numOfBits = Integer.parseInt(numOfBitsString);
-		} catch (NumberFormatException e) {
-			System.out.println("Error converting '" + numOfBitsString + "' into an integer");
-		}
-
-		if (numOfBits < 3 || numOfBits > 5) {
-			JOptionPane.showMessageDialog(null, "Wrong input. Press File and then NEW", "Error", JOptionPane.ERROR_MESSAGE, null);
-		}
-
-		GUI gui = new GUI(Validator.of(numOfBits));
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		start();
 	}
 
 	private static void setUILookAndFeel() {
@@ -146,5 +130,23 @@ public class GUI extends JFrame {
 
 		String binary = Integer.toBinaryString(number);
 		return String.format("%" + bits + "s", binary).replace(' ', '0');
+	}
+
+	public static void start() {
+		String numOfBitsString = JOptionPane.showInputDialog("Enter the boolean bits(3 to 5): ");
+		int numOfBits = -1;
+
+		try {
+			numOfBits = Integer.parseInt(numOfBitsString);
+		} catch (NumberFormatException e) {
+			System.out.println("Error converting '" + numOfBitsString + "' into an integer");
+		}
+
+		if (numOfBits < 3 || numOfBits > 5) {
+			JOptionPane.showMessageDialog(null, "Wrong input. Press File and then NEW", "Error", JOptionPane.ERROR_MESSAGE, null);
+		}
+
+		GUI gui = new GUI(Validator.of(numOfBits));
+		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
