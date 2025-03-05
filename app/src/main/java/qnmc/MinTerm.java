@@ -1,107 +1,126 @@
 package qnmc;
 
 public class MinTerm {
-	// input data representation
+	// External data representation
 	public static final char NOT_CH = '0';
 	public static final char SET_CH = '1';
 	public static final char ANY_CH = '_';
-	// internal data representation
+	
+	// Internal data representation
 	protected static final int NOT = 0;
 	protected static final int SET = 1;
 	protected static final int ANY = -1;
-	// attribute
-	protected int count;
-	protected int[] term;
 
-	// constructing & reading
-	public MinTerm(String str) {
-		term = new int[str.length()];
-		for (int i = 0; i < str.length(); i++) {
-			switch (str.charAt(i)) {
+	protected int variableCount;
+	protected int[] termValues;
+
+	/**
+	 * Constructs a MinTerm from a string representation.
+	 * The string should contain only '0' (NOT), '1' (SET), or '_' (ANY) characters.
+	 * @param binaryString The string representation of the minterm
+	 */
+	public MinTerm(String binaryString) {
+		termValues = new int[binaryString.length()];
+		for (int i = 0; i < binaryString.length(); i++) {
+			switch (binaryString.charAt(i)) {
 			case NOT_CH:
-				term[count++] = NOT;
+				termValues[variableCount++] = NOT;
 				break;
 			case SET_CH:
-				term[count++] = SET;
+				termValues[variableCount++] = SET;
 				break;
 			case ANY_CH:
-				term[count++] = ANY;
+				termValues[variableCount++] = ANY;
 				break;
 			}
 		}
 	}
 
-	// converted to string
-
+	/**
+	 * Converts the MinTerm to its string representation.
+	 * @return A string containing '0', '1', or '_' characters representing the minterm
+	 */
+	@Override
 	public String toString() {
-		StringBuffer buf = new StringBuffer(count);
-		for (int i = 0; i < count; i++) {
-			switch (term[i]) {
-			case NOT:
-				buf.append(NOT_CH);
-				break;
-			case SET:
-				buf.append(SET_CH);
-				break;
-			case ANY:
-				buf.append(ANY_CH);
-				break;
+		StringBuilder result = new StringBuilder(variableCount);
+		for (int i = 0; i < variableCount; i++) {
+			switch (termValues[i]) {
+			case NOT -> result.append(NOT_CH);
+			case SET -> result.append(SET_CH);
+			case ANY -> result.append(ANY_CH);
 			}
 		}
-		return buf.toString();
+		return result.toString();
 	}
 
-	// comparing minterm
-
-	public boolean isSame(MinTerm a) throws Exception {
-		if (count != a.count)
+	/**
+	 * Checks if this MinTerm is identical to another MinTerm.
+	 * @param otherTerm The MinTerm to compare with
+	 * @return true if the minterms are identical, false otherwise
+	 * @throws Exception if the minterms have different lengths
+	 */
+	public boolean isSame(MinTerm otherTerm) throws Exception {
+		if (variableCount != otherTerm.variableCount)
 			throw new Exception("MinTerm::isSame()");
-		for (int i = 0; i < count; i++) {
-			if (term[i] != a.term[i])
+		for (int i = 0; i < variableCount; i++) {
+			if (termValues[i] != otherTerm.termValues[i])
 				return false;
 
 		}
 		return true;
 	}
 
-	// number of the difference
-
-	public int resolutionCount(MinTerm a) throws Exception {
-		if (count != a.count)
+	/**
+	 * Counts the number of positions where two minterms differ.
+	 * @param other The MinTerm to compare with
+	 * @return The number of positions where the minterms differ
+	 * @throws Exception if the minterms have different lengths
+	 */
+	public int getBitDifferencesCount(MinTerm other) throws Exception {
+		if (variableCount != other.variableCount)
 			throw new Exception("MinTerm::resolutionCount()");
-		int resCount = 0;
-		for (int i = 0; i < count; i++) {
-			if (term[i] != a.term[i])
-				resCount++;
+		int differenceCount = 0;
+		for (int i = 0; i < variableCount; i++) {
+			if (termValues[i] != other.termValues[i])
+				differenceCount++;
 		}
-		return resCount;
+		return differenceCount;
 	}
 
-	// position of the first difference
-
-	public int resolutionPos(MinTerm a) throws Exception {
-		if (count != a.count)
+	/**
+	 * Finds the first position where two minterms differ.
+	 * @param other The MinTerm to compare with
+	 * @return The index of the first difference, or -1 if the minterms are identical
+	 * @throws Exception if the minterms have different lengths
+	 */
+	public int resolutionPos(MinTerm other) throws Exception {
+		if (variableCount != other.variableCount)
 			throw new Exception("MinTerm::resoutionPos()");
-		for (int i = 0; i < count; i++) {
-			if (term[i] != a.term[i])
+		for (int i = 0; i < variableCount; i++) {
+			if (termValues[i] != other.termValues[i])
 				return i;
 		}
 
 		return -1;
 	}
 
-	// combining two minterms
-
-	public static MinTerm combine(MinTerm a, MinTerm b) throws Exception {
-		if (a.count != b.count)
+	/**
+	 * Combines two minterms into a new minterm.
+	 * @param first The first MinTerm to combine
+	 * @param second The second MinTerm to combine
+	 * @return A new MinTerm representing the combination of the two input minterms
+	 * @throws Exception if the minterms have different lengths
+	 */
+	public static MinTerm combine(MinTerm firstTerm, MinTerm secondTerm) throws Exception {
+		if (firstTerm.variableCount != secondTerm.variableCount)
 			throw new Exception("MinTerm::combine()");
-		StringBuffer buf = new StringBuffer(a.count);
-		for (int i = 0; i < a.count; i++) {
-			if (a.term[i] != b.term[i])
-				buf.append(ANY_CH);
+		StringBuilder result = new StringBuilder(firstTerm.variableCount);
+		for (int i = 0; i < firstTerm.variableCount; i++) {
+			if (firstTerm.termValues[i] != secondTerm.termValues[i])
+				result.append(ANY_CH);
 			else
-				buf.append(a.toString().charAt(i));
+				result.append(firstTerm.toString().charAt(i));
 		}
-		return new MinTerm(buf.toString());
+		return new MinTerm(result.toString());
 	}
 }

@@ -1,77 +1,95 @@
 package qnmc;
 
 public class Quine {
-	// macro
-	protected static final int MAX_TERMS = 0xff;// 0xff=255
-	// attribute
-	public MinTerm[] terms = new MinTerm[MAX_TERMS];
-	public int count = 0;
 
-	// adding minterms
-	public void addTerm(String str) throws Exception {
-		if (count == MAX_TERMS)
+	protected static final int MAX_TERMS = 255;
+	public MinTerm[] minterms = new MinTerm[MAX_TERMS];
+	public int mintermCount = 0;
+
+	/**
+	 * Adds a new minterm to the Quine-McCluskey solver.
+	 * @param binaryString The string representation of the minterm to add
+	 * @throws Exception if the maximum number of terms is exceeded
+	 */
+	public void addTerm(String binaryString) throws Exception {
+		if (mintermCount == MAX_TERMS)
 			throw new Exception("Quine::addTerm()");
-		terms[count++] = new MinTerm(str);
+		minterms[mintermCount++] = new MinTerm(binaryString);
 	}
 
-	// converted to string
+	/**
+	 * Converts all minterms to a string representation.
+	 * @return A string containing all minterms, one per line
+	 */
+	@Override
 	public String toString() {
-		StringBuffer buf = new StringBuffer();
-		for (int i = 0; i < count; i++) {
-			buf.append(terms[i] + "\n");
+		StringBuilder result = new StringBuilder();
+		for (int i = 0; i < mintermCount; i++) {
+			result.append(minterms[i]).append("\n");
 		}
-		return buf.toString();
+		return result.toString();
 	}
 
-	// see whether the element already exists
-	public boolean hasTerm(MinTerm a) throws Exception {
-		for (int i = 0; i < count; i++) {
-			if (a.isSame(terms[i]))
+	/**
+	 * Checks if a given minterm already exists in the solver.
+	 * @param term The MinTerm to check for
+	 * @return true if the minterm exists, otherwise false
+	 * @throws Exception if comparison fails
+	 */
+	public boolean hasTerm(MinTerm term) throws Exception {
+		for (int i = 0; i < mintermCount; i++) {
+			if (term.isSame(minterms[i]))
 				return true;
 		}
 		return false;
 	}
 
-	// verification of the function
+	/**
+	 * Simplifies the boolean function by repeatedly reducing minterms
+	 * until no further reduction is possible.
+	 * @throws Exception if reduction process fails
+	 */
 	public void simplify() throws Exception {
 		while (reduce() > 0);
 	}
 
-	// reduction of the minterm
+	/**
+	 * Performs one iteration of the reduction algorithm.
+	 * @return The number of new terms created by reduction
+	 * @throws Exception if reduction process fails
+	 */
 	private int reduce() throws Exception {
-		// variable
-		int reducedCount = 0;
-		MinTerm[] reducedTerms = new MinTerm[MAX_TERMS];
-		boolean[] used = new boolean[MAX_TERMS];
+
+		int newTermCount = 0;
+		MinTerm[] newReducedTerms = new MinTerm[MAX_TERMS];
+		boolean[] termsUsedInReduction = new boolean[MAX_TERMS];
 		// working with all minterms
-		for (int i = 0; i < count; i++) {
-			for (int j = i + 1; j < count; j++) {
+		for (int i = 0; i < mintermCount; i++) {
+			for (int j = i + 1; j < mintermCount; j++) {
 				// finding the terms which differs in one place
-				if (terms[i].resolutionCount(terms[j]) == 1) {
-					reducedTerms[reducedCount++] = MinTerm.combine(terms[i],
-							terms[j]);
-					used[i] = true;
-					used[j] = true;
+				if (minterms[i].getBitDifferencesCount(minterms[j]) == 1) {
+					newReducedTerms[newTermCount++] = MinTerm.combine(minterms[i], minterms[j]);
+					termsUsedInReduction[i] = true;
+					termsUsedInReduction[j] = true;
 				}
 			}
 		}
-		// copy the unchanged minterm in new list
+		// Copy the unchanged minterms into a new list
 
-		int totalReduced = reducedCount;
-		for (int i = 0; i < count; i++) {
-			if (used[i] == false) {
-				reducedTerms[totalReduced++] = terms[i];
+		int totalReduced = newTermCount;
+		for (int i = 0; i < mintermCount; i++) {
+			if (termsUsedInReduction[i] == false) {
+				newReducedTerms[totalReduced++] = minterms[i];
 			}
 		}
-		// initialize
-		count = 0;
-		// storing in a list(except the double term)
+
+		mintermCount = 0;
+
 		for (int i = 0; i < totalReduced; i++) {
-			if (!hasTerm(reducedTerms[i]))
-				terms[count++] = reducedTerms[i];
+			if (!hasTerm(newReducedTerms[i]))
+				minterms[mintermCount++] = newReducedTerms[i];
 		}
-		// number of reduction to produce
-		// System.out.println(reducedCount);
-		return reducedCount;
+		
+		return newTermCount;
 	}
 }
