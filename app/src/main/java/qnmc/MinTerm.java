@@ -54,14 +54,23 @@ public class MinTerm {
 	}
 
 	/**
+	 * Validates that two MinTerms have the same variable count
+	 * @param other The MinTerm to compare with
+	 * @throws Exception if the minterms have different lengths
+	 */
+	private void validateVariableCount(MinTerm other) throws Exception {
+		if (variableCount != other.variableCount)
+			throw new Exception("Minterms are of differing length");
+	}
+
+	/**
 	 * Checks if this MinTerm is identical to another MinTerm.
 	 * @param otherTerm The MinTerm to compare with
 	 * @return true if the minterms are identical, false otherwise
 	 * @throws Exception if the minterms have different lengths
 	 */
 	public boolean isSame(MinTerm otherTerm) throws Exception {
-		if (variableCount != otherTerm.variableCount)
-			throw new Exception("MinTerm::isSame()");
+		validateVariableCount(otherTerm);
 		for (int i = 0; i < variableCount; i++) {
 			if (termValues[i] != otherTerm.termValues[i])
 				return false;
@@ -77,8 +86,7 @@ public class MinTerm {
 	 * @throws Exception if the minterms have different lengths
 	 */
 	public int getBitDifferencesCount(MinTerm other) throws Exception {
-		if (variableCount != other.variableCount)
-			throw new Exception("MinTerm::resolutionCount()");
+		validateVariableCount(other);
 		int differenceCount = 0;
 		for (int i = 0; i < variableCount; i++) {
 			if (termValues[i] != other.termValues[i])
@@ -94,8 +102,7 @@ public class MinTerm {
 	 * @throws Exception if the minterms have different lengths
 	 */
 	public int resolutionPos(MinTerm other) throws Exception {
-		if (variableCount != other.variableCount)
-			throw new Exception("MinTerm::resoutionPos()");
+		validateVariableCount(other);
 		for (int i = 0; i < variableCount; i++) {
 			if (termValues[i] != other.termValues[i])
 				return i;
@@ -112,8 +119,7 @@ public class MinTerm {
 	 * @throws Exception if the minterms have different lengths
 	 */
 	public static MinTerm combine(MinTerm firstTerm, MinTerm secondTerm) throws Exception {
-		if (firstTerm.variableCount != secondTerm.variableCount)
-			throw new Exception("MinTerm::combine()");
+		firstTerm.validateVariableCount(secondTerm);
 		StringBuilder result = new StringBuilder(firstTerm.variableCount);
 		for (int i = 0; i < firstTerm.variableCount; i++) {
 			if (firstTerm.termValues[i] != secondTerm.termValues[i])
