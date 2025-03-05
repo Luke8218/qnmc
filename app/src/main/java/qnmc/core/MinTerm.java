@@ -1,4 +1,4 @@
-package qnmc;
+package qnmc.core;
 
 public class MinTerm {
 	// External data representation

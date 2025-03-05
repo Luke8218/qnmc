@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
+import qnmc.ui.MenuBar;
+
 public class MenuBarTest {
     
     @Test

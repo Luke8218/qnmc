@@ -1,4 +1,4 @@
-package qnmc;
+package qnmc.ui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import qnmc.core.Quine;
 import qnmc.validators.Validator;
 
 public class GUI extends JFrame {
