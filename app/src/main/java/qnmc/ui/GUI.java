@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import qnmc.core.Quine;
+import qnmc.controller.QuineController;
 import qnmc.validators.Validator;
 
 public class GUI extends JFrame {
@@ -81,20 +81,7 @@ public class GUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
-				Quine quine = new Quine();
-
-				try {
-					for (String term : set) {
-						quine.addTerm(toBinary(Integer.parseInt(term), validator.getBits()));
-					}
-
-					quine.simplify();
-
-					String result = quine.toString();
-					resultsTextArea.setText(result);
-				} catch (Exception e) {
-					System.out.println("An error occured processing the values");
-				}
+				resultsTextArea.setText(QuineController.getInstance().process(set, validator));
 
 			}
 		});
@@ -116,21 +103,6 @@ public class GUI extends JFrame {
 				| UnsupportedLookAndFeelException e) {
 			System.out.println("Unable to set the UI look and feel to 'NimbusLookAndFeel'");
 		}
-	}
-
-	public static String toBinary(int number, int bits) throws Exception {
-		int maxValue = (1 << bits) - 1;
-
-		if (number < 0) {
-			throw new Exception("Number must be non-negative");
-		}
-
-		if (number > maxValue) {
-			throw new Exception("Number cannot be represented with " + bits + " bits.");
-		}
-
-		String binary = Integer.toBinaryString(number);
-		return String.format("%" + bits + "s", binary).replace(' ', '0');
 	}
 
 	public static void start() {

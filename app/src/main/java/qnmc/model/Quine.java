@@ -1,4 +1,4 @@
-package qnmc.core;
+package qnmc.model;
 
 public class Quine {
 
