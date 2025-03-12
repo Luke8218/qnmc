@@ -8,7 +8,7 @@ import qnmc.validators.Validator;
 public class QuineController {
     private static QuineController instance;
 
-    private final Quine quine;
+    private Quine quine;
 
     private QuineController() {
         quine = new Quine();
@@ -24,6 +24,10 @@ public class QuineController {
 
     public String process(Set<String> set, Validator validator) {
         try {
+            if (set.isEmpty()) {
+                return "No values have been entered";
+            }
+
             for (String term : set) {
                 quine.addTerm(toBinary(Integer.parseInt(term), validator.getBits()));
             }
@@ -31,13 +35,16 @@ public class QuineController {
             quine.simplify();
 
             String result = quine.toString();
+            resetQuine();
             return result;
         } catch (Exception e) {
+            // Rather than throw an exception, sending a string allows it to be
+            // easily displayed to the user in the output box
             return "An error occured processing the values";
         }
     }
 
-    private static String toBinary(int number, int bits) throws Exception {
+    public static String toBinary(int number, int bits) throws Exception {
 		int maxValue = (1 << bits) - 1;
 
 		if (number < 0) {
@@ -51,4 +58,8 @@ public class QuineController {
 		String binary = Integer.toBinaryString(number);
 		return String.format("%" + bits + "s", binary).replace(' ', '0');
 	}
+
+    private void resetQuine() {
+        quine = new Quine();
+    }
 }
