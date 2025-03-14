@@ -45,9 +45,9 @@ public class MinTerm {
 		StringBuilder result = new StringBuilder(variableCount);
 		for (int i = 0; i < variableCount; i++) {
 			switch (termValues[i]) {
-			case NOT -> result.append(NOT_CH);
-			case SET -> result.append(SET_CH);
-			case ANY -> result.append(ANY_CH);
+				case NOT -> result.append(NOT_CH);
+				case SET -> result.append(SET_CH);
+				case ANY -> result.append(ANY_CH);
 			}
 		}
 		return result.toString();
