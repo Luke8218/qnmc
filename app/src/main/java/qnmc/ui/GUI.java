@@ -116,7 +116,8 @@ public class GUI extends JFrame {
 		}
 
 		if (numOfBits < 3 || numOfBits > 5) {
-			JOptionPane.showMessageDialog(null, "Wrong input. Press File and then NEW", "Error", JOptionPane.ERROR_MESSAGE, null);
+			JOptionPane.showMessageDialog(null, "Number of bits must be between 3 and 5", "Error", JOptionPane.ERROR_MESSAGE, null);
+			System.exit(0);
 		}
 
 		GUI gui = new GUI(Validator.of(numOfBits));
