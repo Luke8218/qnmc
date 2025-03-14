@@ -13,7 +13,7 @@ public class Quine {
 	 */
 	public void addTerm(String binaryString) throws Exception {
 		if (mintermCount == MAX_TERMS)
-			throw new Exception("Quine::addTerm()");
+			throw new Exception("Maximum number of terms exceeded");
 		minterms[mintermCount++] = new MinTerm(binaryString);
 	}
 
